@@ -12,16 +12,16 @@ import java.util.Properties;
 
 import pgDev.bukkit.SimpleCommandSigns.SimpleCommandSigns;
 
-public class FCSConfig {
+public class HCSConfig {
 	private Properties properties;
-	private final FakeCommandSigns plugin;
+	private final HiddenCommandSigns plugin;
 	public boolean upToDate = true;
 	
 	// List of Config Options
 	boolean signAutoLock;
 	
 	
-	public FCSConfig(Properties p, final FakeCommandSigns plugin) {
+	public HCSConfig(Properties p, final HiddenCommandSigns plugin) {
         properties = p;
         this.plugin = plugin;
         

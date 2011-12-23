@@ -11,10 +11,10 @@ import org.bukkit.event.block.BlockPhysicsEvent;
  * FakeCommandSigns block listener
  * @author pgDev
  */
-public class FakeCommandSignsBlockListener extends BlockListener {
-    private final FakeCommandSigns plugin;
+public class HiddenCommandSignsBlockListener extends BlockListener {
+    private final HiddenCommandSigns plugin;
 
-    public FakeCommandSignsBlockListener(final FakeCommandSigns plugin) {
+    public HiddenCommandSignsBlockListener(final HiddenCommandSigns plugin) {
         this.plugin = plugin;
     }
 

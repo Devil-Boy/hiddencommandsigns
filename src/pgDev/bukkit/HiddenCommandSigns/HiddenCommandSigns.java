@@ -24,10 +24,10 @@ import com.nijikokun.bukkit.Permissions.Permissions;
  *
  * @author pgDev
  */
-public class FakeCommandSigns extends JavaPlugin {
+public class HiddenCommandSigns extends JavaPlugin {
 	// Listeners
-    private final FakeCommandSignsPlayerListener playerListener = new FakeCommandSignsPlayerListener(this);
-    private final FakeCommandSignsBlockListener blockListener = new FakeCommandSignsBlockListener(this);
+    private final HiddenCommandSignsPlayerListener playerListener = new HiddenCommandSignsPlayerListener(this);
+    private final HiddenCommandSignsBlockListener blockListener = new HiddenCommandSignsBlockListener(this);
     
     // Magic string
     String scsID;

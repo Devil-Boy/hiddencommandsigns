@@ -11,10 +11,10 @@ import org.bukkit.event.player.PlayerMoveEvent;
  * Handle events for all Player related events
  * @author pgDev
  */
-public class FakeCommandSignsPlayerListener extends PlayerListener {
-    private final FakeCommandSigns plugin;
+public class HiddenCommandSignsPlayerListener extends PlayerListener {
+    private final HiddenCommandSigns plugin;
 
-    public FakeCommandSignsPlayerListener(FakeCommandSigns instance) {
+    public HiddenCommandSignsPlayerListener(HiddenCommandSigns instance) {
         plugin = instance;
     }
     

@@ -1,0 +1,35 @@
+name: HiddenCommandSigns
+main: pgDev.bukkit.HiddenCommandSigns.HiddenCommandSigns
+version: 0.1
+author: Devil Boy
+description: Hit a sign, run a hidden command!
+depend: [SimpleCommandSigns]
+
+commands:
+   hiddencommandsigns:
+      description: Main command.
+      usage: /<command>
+   hcs:
+      description: Alt command.
+      usage: /<command>
+
+permissions:
+    hcs.*:
+        default: op
+        description: Gives access to all Hidden Command Signs usage.
+        children:
+            hcs.create: true
+            hcs.use: true
+            hcs.detect: true
+    hcs.create:
+        default: op
+        description: Can create a hidden command sign.
+    hcs.use:
+        default: true
+        description: Can use a hidden command sign.
+    hcs.detect:
+        default: op
+        description: Can detect hidden command signs.
+    hcs.obtainreal:
+        default: op
+        description: Can get the real command behind the sign.

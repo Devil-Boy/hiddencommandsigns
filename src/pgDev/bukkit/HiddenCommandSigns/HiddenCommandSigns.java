@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event;
@@ -36,8 +37,12 @@ public class HiddenCommandSigns extends JavaPlugin {
     private static PermissionHandler Permissions;
     
     // File Locations
-    String pluginMainDir = "./plugins/SimpleCommandSigns";
-    String pluginConfigLocation = pluginMainDir + "/SimpleCommandSigns.cfg";
+    String pluginMainDir = "./plugins/HiddenCommandSigns";
+    String pluginConfigLocation = pluginMainDir + "/HiddenCommandSigns.cfg";
+    
+    // HCS Actions
+    public enum signAction { CREATE, DETECT, OBTAINREAL, ADDPERM };
+    HashMap<String, signAction> commandUsers = new HashMap<String, signAction>();
 
     public void onEnable() {
     	// Check for SCS
@@ -56,7 +61,7 @@ public class HiddenCommandSigns extends JavaPlugin {
     }
     
     public void onDisable() {
-        System.out.println("FakeCommandSigns disabled!");
+        System.out.println("HiddenCommandSigns disabled!");
     }
     
     // SCS Link
@@ -84,7 +89,7 @@ public class HiddenCommandSigns extends JavaPlugin {
     }
     
     public static boolean hasPermissions(Player player, String node) {
-        if (Permissions != null) {
+        if (Permissions != null) { // .addUserPermission and .removeUserPermission: world, user, node
         	return Permissions.has(player, node);
         } else {
             return player.hasPermission(node);
@@ -98,6 +103,34 @@ public class HiddenCommandSigns extends JavaPlugin {
 			player = (Player)sender;
 			
 			// Start here
+			if (args.length == 0) { // Help output
+				if (hasPermissions(player, "hcs.create") || hasPermissions(player, "hcs.detect") || hasPermissions(player, "hcs.obtainreal")) {
+					player.sendMessage(ChatColor.GREEN + "Useable HiddenCommandSignsCommands:");
+					if (hasPermissions(player, "hcs.create")) {
+						player.sendMessage(ChatColor.GREEN + "/hcs create \"<true command>\" [\"other commands\"]");
+						player.sendMessage(ChatColor.GREEN + "/hcs addperm \"<permission>\" [\"other permissions\"]");
+					}
+					if (hasPermissions(player, "hcs.detect")) {
+						player.sendMessage(ChatColor.GREEN + "/hcs detect");
+					}
+					if (hasPermissions(player, "hcs.obtainreal")) {
+						player.sendMessage(ChatColor.GREEN + "/hcs obtainreal");
+					}
+					player.sendMessage(ChatColor.GREEN + "Note: Only the first letter of the command will work as well.");
+				} else {
+					player.sendMessage(ChatColor.RED + "You do not have the permissions required to run any HiddenCommandSigns command.");
+				}
+			} else {
+				if (args[0].toLowerCase().startsWith("c")) { // Create
+					
+				} else if (args[0].toLowerCase().startsWith("d")) { // Detect
+					
+				} else if (args[0].toLowerCase().startsWith("o")) { // ObtainReal
+					
+				} else if (args[0].toLowerCase().startsWith("a")) { // AddPerm
+					
+				}
+			}
 		} else {
 			sender.sendMessage("This command is only to be run by a player.");
 		}

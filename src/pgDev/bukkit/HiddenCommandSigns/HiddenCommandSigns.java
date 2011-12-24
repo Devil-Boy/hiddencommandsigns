@@ -39,25 +39,45 @@ public class HiddenCommandSigns extends JavaPlugin {
     // File Locations
     String pluginMainDir = "./plugins/HiddenCommandSigns";
     String pluginConfigLocation = pluginMainDir + "/HiddenCommandSigns.cfg";
+    String commandDBLocation = pluginMainDir + "/HiddenCommands.ini";
     
     // HCS Actions
     public enum signAction { CREATE, DETECT, OBTAINREAL, ADDPERM };
     HashMap<String, signAction> commandUsers = new HashMap<String, signAction>();
+    
+    // True Command Database
+    HashMap<String, HiddenCommand> commandLinks = new HashMap<String, HiddenCommand>();
 
     public void onEnable() {
     	// Check for SCS
     	if (!setupSCS()) {
     		System.out.println("SimpleCommandSigns was not found on this server!");
     		getPluginLoader().disablePlugin(this);
+    	} else {
+    		// Check for the plugin directory (create if it does not exist)
+        	File pluginDir = new File(pluginMainDir);
+    		if(!pluginDir.exists()) {
+    			boolean dirCreation = pluginDir.mkdirs();
+    			if (dirCreation) {
+    				System.out.println("New HiddenCommandSigns directory created!");
+    			}
+    		}
+    		
+    		// Load up database (or create if there isn't one)
+    		if ((new File(commandDBLocation)).exists()) {
+    			commandLinks = HCSDatabaseIO.getDB(commandDBLocation);
+    		} else {
+    			HCSDatabaseIO.saveDB(commandDBLocation, commandLinks);
+    		}
+    		
+	        // Register our events
+	        PluginManager pm = getServer().getPluginManager();
+	        pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
+	        
+	        // Enable output
+	        PluginDescriptionFile pdfFile = this.getDescription();
+	        System.out.println( pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );
     	}
-
-        // Register our events
-        PluginManager pm = getServer().getPluginManager();
-        pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
-        
-        // Enable output
-        PluginDescriptionFile pdfFile = this.getDescription();
-        System.out.println( pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );
     }
     
     public void onDisable() {

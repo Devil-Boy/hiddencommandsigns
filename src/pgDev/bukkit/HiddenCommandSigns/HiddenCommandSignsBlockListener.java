@@ -81,25 +81,72 @@ public class HiddenCommandSignsBlockListener extends BlockListener {
 	    		    		System.out.println(name + " hit either an scs or a hcs.");
 	    		    	}
 	    				
-	    				theSign.setLine(0, theSign.getLine(0) + ChatColor.BLUE);
+	    				if (isCS(theSign)) { // Convert the Sign to HCS
+	    					theSign.setLine(0, theSign.getLine(0) + ChatColor.BLUE);
+	    				}
 	    				String signText = theSign.getLine(1) + theSign.getLine(2) + theSign.getLine(3);
 	    				plugin.commandLinks.put(signText, new HiddenCommand(name, plugin.commandData.get(name)));
 	    				player.sendMessage(ChatColor.GOLD + "HiddenCommandSign created with " + plugin.commandData.get(name).length + " commands.");
-	    				plugin.removeCommandPlayer(player);
 	    			} else {
 	    				player.sendMessage(ChatColor.RED + "That isn't a CommandSign.");
 	    			}
 	    		} else {
 	    			player.sendMessage(ChatColor.RED + "That isn't a sign.");
 	    		}
+    		} else if (plugin.commandUsers.get(name) == signAction.DETECT) {
+    			if (isSign(event.getBlock())) {
+    				Sign theSign = (Sign)event.getBlock().getState();
+    				if (isHCS(theSign)) {
+    					String signText = theSign.getLine(1) + theSign.getLine(2) + theSign.getLine(3);
+    					try {
+    						player.sendMessage(ChatColor.GOLD + "HiddenCommandSign created by " + plugin.commandLinks.get(signText).author);
+    					} catch (NullPointerException e) {
+    						System.out.println("Could not find commandlink for HiddenCommandSign at " + event.getBlock().getLocation().toString() + " with the sign text " + signText);
+    						player.sendMessage(ChatColor.RED + "That is a HiddenCommandSign, but the command link could not be found. Perhaps the database file was edited or is missing?");
+    					}
+    				} else {
+    					player.sendMessage(ChatColor.RED + "That isn't a HiddenCommandSign.");
+    				}
+    			} else {
+    				player.sendMessage(ChatColor.RED + "That isn't a sign.");
+    			}
+    		} else if (plugin.commandUsers.get(name) == signAction.OBTAINREAL) {
+    			if (isSign(event.getBlock())) {
+    				Sign theSign = (Sign)event.getBlock().getState();
+    				if (isHCS(theSign)) {
+    					String signText = theSign.getLine(1) + theSign.getLine(2) + theSign.getLine(3);
+    					try {
+    						String commandSequence = "";
+    						for (String commandString : plugin.commandLinks.get(signText).commands) {
+    							if (commandSequence.equals("")) {
+    								commandSequence = "\"" + commandString + "\"";
+    							} else {
+    								commandSequence = commandSequence + " \"" + commandString + "\"";
+    							}
+    						}
+    						player.sendMessage(ChatColor.GOLD + commandSequence);
+    					} catch (NullPointerException e) {
+    						System.out.println("Could not find commandlink for HiddenCommandSign at " + event.getBlock().getLocation().toString() + " with the sign text " + signText);
+    						player.sendMessage(ChatColor.RED + "That is a HiddenCommandSign, but the command link could not be found. Perhaps the database file was edited or is missing?");
+    					}
+    				} else {
+    					player.sendMessage(ChatColor.RED + "That isn't a HiddenCommandSign.");
+    				}
+    			} else {
+    				player.sendMessage(ChatColor.RED + "That isn't a sign.");
+    			}
     		} else if (plugin.commandUsers.get(name) == signAction.ADDPERM) {
     			if (isSign(event.getBlock())) {
     				Sign theSign = (Sign)event.getBlock().getState();
     				if (isHCS(theSign)) {
     					String signText = theSign.getLine(1) + theSign.getLine(2) + theSign.getLine(3);
-    					plugin.commandLinks.put(signText, plugin.commandLinks.get(signText).addPerms(plugin.commandData.get(name)));
-    					plugin.removeCommandPlayer(player);
-	    				player.sendMessage(ChatColor.GOLD + "Added " + plugin.commandData.get(name).length + " permission(s) to the HiddenCommandSign.");
+    					try {
+	    					plugin.commandLinks.put(signText, plugin.commandLinks.get(signText).addPerms(plugin.commandData.get(name)));
+		    				player.sendMessage(ChatColor.GOLD + "Added " + plugin.commandData.get(name).length + " permission(s) to the HiddenCommandSign.");
+    					} catch (NullPointerException e) {
+    						System.out.println("Could not find commandlink for HiddenCommandSign at " + event.getBlock().getLocation().toString() + " with the sign text " + signText);
+    						player.sendMessage(ChatColor.RED + "That is a HiddenCommandSign, but the command link could not be found. Perhaps the database file was edited or is missing?");
+    					}
     				} else {
     					player.sendMessage(ChatColor.RED + "That isn't a HiddenCommandSign.");
     				}
@@ -107,6 +154,7 @@ public class HiddenCommandSignsBlockListener extends BlockListener {
     				player.sendMessage(ChatColor.RED + "That isn't a sign.");
     			}
     		}
+    		plugin.removeCommandPlayer(player);
     	}
     }
 }

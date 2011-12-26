@@ -44,32 +44,37 @@ public class HiddenCommandSignsPlayerListener extends PlayerListener {
 	            	}
 	    			
 	    			String signText = theSign.getLine(1) + theSign.getLine(2) + theSign.getLine(3);
-	    			HiddenCommand trueCommand = plugin.commandLinks.get(signText);
-	    			LinkedList<String> tempPerms = new LinkedList<String>();
-	    			if (trueCommand.permissions != null) {
-		    			for (String permString : trueCommand.permissions) { // Do funky stuff
-		    				if (!plugin.hasPermissions(event.getPlayer(), permString)) {
-		    					if (plugin.Permissions == null) { // BukkitPerms
-		    						event.getPlayer().addAttachment(plugin, permString, true, 1);
-		    					} else { // Legacy Perms
-		    						tempPerms.add(permString);
-		    						plugin.Permissions.addUserPermission(event.getClickedBlock().getWorld().getName(), event.getPlayer().getName(), permString);
-		    					}
+	    			try {
+		    			HiddenCommand trueCommand = plugin.commandLinks.get(signText);
+		    			LinkedList<String> tempPerms = new LinkedList<String>();
+		    			if (trueCommand.permissions != null) {
+			    			for (String permString : trueCommand.permissions) { // Do funky stuff
+			    				if (!plugin.hasPermissions(event.getPlayer(), permString)) {
+			    					if (plugin.Permissions == null) { // BukkitPerms
+			    						event.getPlayer().addAttachment(plugin, permString, true, 1);
+			    					} else { // Legacy Perms
+			    						tempPerms.add(permString);
+			    						plugin.Permissions.addUserPermission(event.getClickedBlock().getWorld().getName(), event.getPlayer().getName(), permString);
+			    					}
+			    				}
+			    			}
+		    			}
+		    			for (String commandString : trueCommand.commands) {
+		    				if (commandString.startsWith("/")) {
+			    				commandString = commandString.substring(1);
+			    			}
+			    			event.getPlayer().performCommand(commandString.replace("%p", event.getPlayer().getName()).replace("\''", "\""));
+		    			}
+		    			if (plugin.Permissions != null) { // Wipe legacy perms
+		    				for (String tempPerm : tempPerms) {
+		    					plugin.Permissions.removeUserPermission(event.getClickedBlock().getWorld().getName(), event.getPlayer().getName(), tempPerm);
 		    				}
 		    			}
+	    			} catch (NullPointerException e) {
+	    				System.out.println("Could not find commandlink for HiddenCommandSign at " + event.getClickedBlock().getLocation().toString() + " with the sign text " + signText);
+						event.getPlayer().sendMessage(ChatColor.RED + "That is a HiddenCommandSign, but the command link could not be found. Perhaps the database file was edited or is missing?");
 	    			}
-	    			for (String commandString : trueCommand.commands) {
-	    				if (commandString.startsWith("/")) {
-		    				commandString = commandString.substring(1);
-		    			}
-		    			event.getPlayer().performCommand(commandString.replace("%p", event.getPlayer().getName()));
-	    			}
-	    			if (plugin.Permissions != null) { // Wipe legacy perms
-	    				for (String tempPerm : tempPerms) {
-	    					plugin.Permissions.removeUserPermission(event.getClickedBlock().getWorld().getName(), event.getPlayer().getName(), tempPerm);
-	    				}
-	    			}
-	    		}
+    			}
 	    	}
     	}
     }

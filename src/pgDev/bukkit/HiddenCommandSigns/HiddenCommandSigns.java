@@ -158,7 +158,7 @@ public class HiddenCommandSigns extends JavaPlugin {
 					player.sendMessage(ChatColor.RED + "You do not have the permissions required to run any HiddenCommandSigns command.");
 				}
 			} else {
-				if (args[0].toLowerCase().matches("[a-z]{1,}")) { // Only letters
+				if (args[0].toLowerCase().matches("\\w")) { // Only letters (or [a-z]{1,})
 					// Convert arguments into a string I might be able to parse
 					String argString = "";
 					for (String arg : args) {
@@ -197,14 +197,16 @@ public class HiddenCommandSigns extends JavaPlugin {
 						
 					} else if (args[0].toLowerCase().startsWith("d")) { // Detect
 						if (hasPermissions(player, "hcs.detect")) {
-							
+							addCommandPlayer(player , signAction.DETECT, null);
+							player.sendMessage(ChatColor.BLUE + "Left-click the sign you wish to check.");
 						} else {
 							player.sendMessage(ChatColor.RED + "You do not have the permission required to run this command.");
 						}
 						
 					} else if (args[0].toLowerCase().startsWith("o")) { // ObtainReal
 						if (hasPermissions(player, "hcs.obtainreal")) {
-							
+							addCommandPlayer(player, signAction.OBTAINREAL, null);
+							player.sendMessage(ChatColor.BLUE + "Left-click the sign you wish to obtain the hidden command of.");
 						} else {
 							player.sendMessage(ChatColor.RED + "You do not have the permission required to run this command.");
 						}

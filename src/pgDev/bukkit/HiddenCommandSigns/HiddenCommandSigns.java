@@ -25,14 +25,14 @@ import com.nijikokun.bukkit.Permissions.Permissions;
  */
 public class HiddenCommandSigns extends JavaPlugin {
 	// Listeners
-    private final HiddenCommandSignsPlayerListener playerListener = new HiddenCommandSignsPlayerListener(this);
-    private final HiddenCommandSignsBlockListener blockListener = new HiddenCommandSignsBlockListener(this);
+    final HiddenCommandSignsPlayerListener playerListener = new HiddenCommandSignsPlayerListener(this);
+    final HiddenCommandSignsBlockListener blockListener = new HiddenCommandSignsBlockListener(this);
     
     // Magic string
     String scsID;
     
     // Permissions support
-    private static PermissionHandler Permissions;
+    static PermissionHandler Permissions;
     
     // File Locations
     String pluginMainDir = "./plugins/HiddenCommandSigns";
@@ -42,7 +42,7 @@ public class HiddenCommandSigns extends JavaPlugin {
     // HCS Actions
     public enum signAction { CREATE, DETECT, OBTAINREAL, ADDPERM };
     HashMap<String, signAction> commandUsers = new HashMap<String, signAction>();
-    HashMap<String, LinkedList<String>> commandData = new HashMap<String,LinkedList<String>>(); // For CREATE and ADDPERM
+    HashMap<String, String[]> commandData = new HashMap<String, String[]>(); // For CREATE and ADDPERM
     
     // True Command Database
     HashMap<String, HiddenCommand> commandLinks = new HashMap<String, HiddenCommand>();
@@ -70,6 +70,7 @@ public class HiddenCommandSigns extends JavaPlugin {
 	        // Register our events
 	        PluginManager pm = getServer().getPluginManager();
 	        pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
+	        pm.registerEvent(Event.Type.BLOCK_DAMAGE, blockListener, Priority.Normal, this);
 	        
 	        // Enable output
 	        PluginDescriptionFile pdfFile = this.getDescription();
@@ -113,6 +114,22 @@ public class HiddenCommandSigns extends JavaPlugin {
         }
     }
     
+    // Double database handling
+    public void addCommandPlayer(Player thePlayer, signAction leActione, String[] commandStuff) {
+    	String hisName = thePlayer.getName();
+		commandUsers.put(hisName, leActione);
+		if (commandStuff == null) {
+			commandData.remove(hisName);
+		} else {
+			commandData.put(hisName, commandStuff);
+		}
+    }
+    public void removeCommandPlayer(Player thePlayer) {
+    	String hisName = thePlayer.getName();
+    	commandData.remove(hisName);
+    	commandUsers.remove(hisName);
+    }
+    
     // Handle commands
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     	Player player;
@@ -138,7 +155,7 @@ public class HiddenCommandSigns extends JavaPlugin {
 					player.sendMessage(ChatColor.RED + "You do not have the permissions required to run any HiddenCommandSigns command.");
 				}
 			} else {
-				if (args[0].toLowerCase().matches("\\p{L}")) { // Only letters
+				if (args[0].toLowerCase().matches("[a-z]{1,}")) { // Only letters
 					// Convert arguments into a string I might be able to parse
 					String argString = "";
 					for (String arg : args) {
@@ -155,10 +172,21 @@ public class HiddenCommandSigns extends JavaPlugin {
 							if (args.length < 2) {
 								player.sendMessage(ChatColor.GREEN + "Usage: /hcs create \"<command>\" [\"othercommand\"]");
 							} else {
+								// Fix the input to our needs
 								String modifiedArgString = argString.replace(args[0], "").trim();
-								LinkedList<String> commandSequence = new LinkedList<String>();
+								if (modifiedArgString.startsWith("\"")) {
+									modifiedArgString = modifiedArgString.substring(1);
+								}
+								if (modifiedArgString.endsWith("\"")) {
+									modifiedArgString = modifiedArgString.substring(0, modifiedArgString.length() - 1);
+								}
+								String[] commandSequence = modifiedArgString.split("\" \"");
 								
-								// Continue here
+								// Set him up for the hitting
+								addCommandPlayer(player , signAction.CREATE, commandSequence);
+								
+								// Tell him what to do
+								player.sendMessage(ChatColor.BLUE + "Left-click the sign you wish to convert.");
 							}
 						} else {
 							player.sendMessage(ChatColor.RED + "You do not have the permission required to run this command.");
@@ -180,7 +208,25 @@ public class HiddenCommandSigns extends JavaPlugin {
 						
 					} else if (args[0].toLowerCase().startsWith("a")) { // AddPerm
 						if (hasPermissions(player, "hcs.addperm")) {
-							
+							if (args.length < 2) {
+								player.sendMessage(ChatColor.GREEN + "Usage: /hcs addperm \"<permission>\" [\"otherpermission\"]");
+							} else {
+								// Fix the input to our needs
+								String modifiedArgString = argString.replace(args[0], "").trim();
+								if (modifiedArgString.startsWith("\"")) {
+									modifiedArgString = modifiedArgString.substring(1);
+								}
+								if (modifiedArgString.endsWith("\"")) {
+									modifiedArgString = modifiedArgString.substring(0, modifiedArgString.length() - 1);
+								}
+								String[] permSequence = modifiedArgString.split("\" \"");
+								
+								// Set him up for the hitting
+								addCommandPlayer(player , signAction.ADDPERM, permSequence);
+								
+								// Tell him what to do
+								player.sendMessage(ChatColor.BLUE + "Left-click the sign you wish to add the permission(s) to.");
+							}
 						} else {
 							player.sendMessage(ChatColor.RED + "You do not have the permission required to run this command.");
 						}

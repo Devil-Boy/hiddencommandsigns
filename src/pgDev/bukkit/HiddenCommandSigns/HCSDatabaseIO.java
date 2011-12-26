@@ -7,8 +7,8 @@ import java.util.HashMap;
 
 public class HCSDatabaseIO {
 	// The ever unique separators
-	public static String commandSeparator = " -#command separator#- ";
-	public static String permissionSeparator = " -#permission separator#- ";
+	public static String commandSeparator = " -#cs#- ";
+	public static String permissionSeparator = " -#ps#- ";
 	
 	public static HashMap<String, HiddenCommand> getDB(String dbLocation) {
 		HashMap<String, HiddenCommand> output = new HashMap<String, HiddenCommand>();

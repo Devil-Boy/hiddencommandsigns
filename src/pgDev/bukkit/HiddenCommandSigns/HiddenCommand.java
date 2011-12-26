@@ -6,10 +6,14 @@ public class HiddenCommand {
 	public String[] commands;
 	public String[] permissions;
 	
-	// Le Constructor
-	public HiddenCommand(String authorI, String[] commandsI, String[] permissionsI) {
+	// Le Constructors
+	public HiddenCommand(String authorI, String[] commandsI) {
 		author = authorI;
 		commands = commandsI;
-		permissions = permissionsI;
+	}
+	
+	public HiddenCommand addPerms(String[] perms) {
+		permissions = perms;
+		return this;
 	}
 }

@@ -27,21 +27,36 @@ public class HiddenCommandSignsPlayerListener extends PlayerListener {
     // Respond to right-click
     public void onPlayerInteract(PlayerInteractEvent event) {
     	if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.hasPermissions(event.getPlayer(), "scs.use")) {
+    		if (plugin.debug) {
+        		System.out.println(event.getPlayer().getName() + " right-clicked a block.");
+        	}
+    		
     		if (event.getClickedBlock() != null && plugin.blockListener.isSign(event.getClickedBlock())) {
-	    		Sign theSign = (Sign)event.getClickedBlock().getState();
+    			Sign theSign = (Sign)event.getClickedBlock().getState();
+    			
+    			if (plugin.debug) {
+            		System.out.println("And it was a sign with first line text: " + theSign.getLine(0));
+            	}
+    			
 	    		if (plugin.blockListener.isHCS(theSign)) {
+	    			if (plugin.debug) {
+	            		System.out.println(event.getPlayer().getName() + " right-clicked a hiddencommandsign.");
+	            	}
+	    			
 	    			String signText = theSign.getLine(1) + theSign.getLine(2) + theSign.getLine(3);
 	    			HiddenCommand trueCommand = plugin.commandLinks.get(signText);
 	    			LinkedList<String> tempPerms = new LinkedList<String>();
-	    			for (String permString : trueCommand.permissions) { // Do funky stuff
-	    				if (!plugin.hasPermissions(event.getPlayer(), permString)) {
-	    					if (plugin.Permissions == null) { // BukkitPerms
-	    						event.getPlayer().addAttachment(plugin, permString, true, 1);
-	    					} else { // Legacy Perms
-	    						tempPerms.add(permString);
-	    						plugin.Permissions.addUserPermission(event.getClickedBlock().getWorld().getName(), event.getPlayer().getName(), permString);
-	    					}
-	    				}
+	    			if (trueCommand.permissions != null) {
+		    			for (String permString : trueCommand.permissions) { // Do funky stuff
+		    				if (!plugin.hasPermissions(event.getPlayer(), permString)) {
+		    					if (plugin.Permissions == null) { // BukkitPerms
+		    						event.getPlayer().addAttachment(plugin, permString, true, 1);
+		    					} else { // Legacy Perms
+		    						tempPerms.add(permString);
+		    						plugin.Permissions.addUserPermission(event.getClickedBlock().getWorld().getName(), event.getPlayer().getName(), permString);
+		    					}
+		    				}
+		    			}
 	    			}
 	    			for (String commandString : trueCommand.commands) {
 	    				if (commandString.startsWith("/")) {

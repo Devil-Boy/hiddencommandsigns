@@ -24,6 +24,9 @@ import com.nijikokun.bukkit.Permissions.Permissions;
  * @author pgDev
  */
 public class HiddenCommandSigns extends JavaPlugin {
+	// Debug output?
+	public boolean debug = true;
+	
 	// Listeners
     final HiddenCommandSignsPlayerListener playerListener = new HiddenCommandSignsPlayerListener(this);
     final HiddenCommandSignsBlockListener blockListener = new HiddenCommandSignsBlockListener(this);
@@ -87,7 +90,7 @@ public class HiddenCommandSigns extends JavaPlugin {
     	Plugin scs = this.getServer().getPluginManager().getPlugin("SimpleCommandSigns");
 
         if (scs != null) {
-            scsID = ((SimpleCommandSigns) scs).pluginSettings.commandSignIdentifier;
+        	scsID = ((SimpleCommandSigns) scs).pluginSettings.commandSignIdentifier;
             return true;
         } else {
         	return false;

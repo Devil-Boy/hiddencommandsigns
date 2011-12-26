@@ -53,16 +53,39 @@ public class HiddenCommandSignsBlockListener extends BlockListener {
     	Player player = event.getPlayer();
     	String name = player.getName();
     	
+    	if (plugin.debug) {
+    		System.out.println(name + " damaged a block.");
+    	}
+    	
     	if (plugin.commandUsers.containsKey(name)) {
+    		if (plugin.debug) {
+        		System.out.println(name + " is using an hcs action.");
+        	}
+        	
+        	// Prevent destroyation
+    		event.setCancelled(true);
+    		
     		if (plugin.commandUsers.get(name) == signAction.CREATE) {
+    			if (plugin.debug) {
+    	    		System.out.println(name + " is trying to create a hiddencommandsign");
+    	    	}
+    			
 	    		if (isSign(event.getBlock())) {
+	    			if (plugin.debug) {
+	    	    		System.out.println("The block " + name + " was a sign.");
+	    	    	}
+	    			
 	    			Sign theSign = (Sign)event.getBlock().getState();
 	    			if (isEitherSign(theSign)) {
+	    				if (plugin.debug) {
+	    		    		System.out.println(name + " hit either an scs or a hcs.");
+	    		    	}
+	    				
 	    				theSign.setLine(0, theSign.getLine(0) + ChatColor.BLUE);
 	    				String signText = theSign.getLine(1) + theSign.getLine(2) + theSign.getLine(3);
 	    				plugin.commandLinks.put(signText, new HiddenCommand(name, plugin.commandData.get(name)));
-	    				plugin.removeCommandPlayer(player);
 	    				player.sendMessage(ChatColor.GOLD + "HiddenCommandSign created with " + plugin.commandData.get(name).length + " commands.");
+	    				plugin.removeCommandPlayer(player);
 	    			} else {
 	    				player.sendMessage(ChatColor.RED + "That isn't a CommandSign.");
 	    			}

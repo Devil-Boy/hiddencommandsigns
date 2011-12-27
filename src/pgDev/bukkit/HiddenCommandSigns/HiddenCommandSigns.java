@@ -25,7 +25,7 @@ import com.nijikokun.bukkit.Permissions.Permissions;
  */
 public class HiddenCommandSigns extends JavaPlugin {
 	// Debug output?
-	public boolean debug = true;
+	public boolean debug = false;
 	
 	// Listeners
     final HiddenCommandSignsPlayerListener playerListener = new HiddenCommandSignsPlayerListener(this);
@@ -67,7 +67,12 @@ public class HiddenCommandSigns extends JavaPlugin {
     		
     		// Load up database (if there isn't one it's fine)
     		if ((new File(commandDBLocation)).exists()) {
-    			commandLinks = HCSDatabaseIO.getDB(commandDBLocation);
+    			if (HCSDatabaseIO.checkIntegrity(commandDBLocation)) {
+    				commandLinks = HCSDatabaseIO.getDB(commandDBLocation);
+    			} else {
+    				System.out.println("HiddenCommandSigns database corrupted. Did you change the line positions?");
+    				getPluginLoader().disablePlugin(this);
+    			}
     		}
     		
 	        // Register our events
@@ -133,6 +138,11 @@ public class HiddenCommandSigns extends JavaPlugin {
     	commandUsers.remove(hisName);
     }
     
+    // Save CL Database
+    public void saveDB() {
+    	HCSDatabaseIO.saveDB(commandDBLocation, commandLinks);
+    }
+    
     // Handle commands
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     	Player player;
@@ -158,7 +168,7 @@ public class HiddenCommandSigns extends JavaPlugin {
 					player.sendMessage(ChatColor.RED + "You do not have the permissions required to run any HiddenCommandSigns command.");
 				}
 			} else {
-				if (args[0].toLowerCase().matches("\\w")) { // Only letters (or [a-z]{1,})
+				if (args[0].toLowerCase().matches("[a-z]{1,}")) { // Only letters
 					// Convert arguments into a string I might be able to parse
 					String argString = "";
 					for (String arg : args) {

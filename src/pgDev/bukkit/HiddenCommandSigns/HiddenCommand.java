@@ -7,6 +7,10 @@ public class HiddenCommand {
 	public String[] permissions;
 	
 	// Le Constructors
+	public HiddenCommand() {
+		
+	}
+	
 	public HiddenCommand(String authorI, String[] commandsI) {
 		author = authorI;
 		commands = commandsI;

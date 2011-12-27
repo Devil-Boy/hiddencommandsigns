@@ -1,6 +1,6 @@
 name: HiddenCommandSigns
 main: pgDev.bukkit.HiddenCommandSigns.HiddenCommandSigns
-version: 0.1
+version: 0.5
 author: Devil Boy
 description: Hit a sign, run a hidden command!
 depend: [SimpleCommandSigns]

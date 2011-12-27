@@ -86,6 +86,7 @@ public class HiddenCommandSignsBlockListener extends BlockListener {
 	    				}
 	    				String signText = theSign.getLine(1) + theSign.getLine(2) + theSign.getLine(3);
 	    				plugin.commandLinks.put(signText, new HiddenCommand(name, plugin.commandData.get(name)));
+	    				plugin.saveDB();
 	    				player.sendMessage(ChatColor.GOLD + "HiddenCommandSign created with " + plugin.commandData.get(name).length + " commands.");
 	    			} else {
 	    				player.sendMessage(ChatColor.RED + "That isn't a CommandSign.");
@@ -142,6 +143,7 @@ public class HiddenCommandSignsBlockListener extends BlockListener {
     					String signText = theSign.getLine(1) + theSign.getLine(2) + theSign.getLine(3);
     					try {
 	    					plugin.commandLinks.put(signText, plugin.commandLinks.get(signText).addPerms(plugin.commandData.get(name)));
+	    					plugin.saveDB();
 		    				player.sendMessage(ChatColor.GOLD + "Added " + plugin.commandData.get(name).length + " permission(s) to the HiddenCommandSign.");
     					} catch (NullPointerException e) {
     						System.out.println("Could not find commandlink for HiddenCommandSign at " + event.getBlock().getLocation().toString() + " with the sign text " + signText);

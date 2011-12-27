@@ -63,7 +63,7 @@ public class HiddenCommandSignsPlayerListener extends PlayerListener {
 		    				if (commandString.startsWith("/")) {
 			    				commandString = commandString.substring(1);
 			    			}
-			    			event.getPlayer().performCommand(commandString.replace("%p", event.getPlayer().getName()).replace("\''", "\""));
+			    			event.getPlayer().performCommand(commandString.replace("%p", event.getPlayer().getName()).replace("\\''", "\""));
 		    			}
 		    			if (plugin.Permissions != null) { // Wipe legacy perms
 		    				for (String tempPerm : tempPerms) {

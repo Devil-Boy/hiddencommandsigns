@@ -125,7 +125,7 @@ public class HiddenCommandSignsBlockListener extends BlockListener {
     								commandSequence = commandSequence + " \"" + commandString + "\"";
     							}
     						}
-    						player.sendMessage(ChatColor.GOLD + "Command(s): " +commandSequence);
+    						player.sendMessage(ChatColor.GOLD + "Command(s): " + commandSequence);
     						if (plugin.commandLinks.get(signText).permissions != null) {
     							String permList = "";
     							for (String permString : plugin.commandLinks.get(signText).permissions) {
@@ -162,6 +162,25 @@ public class HiddenCommandSignsBlockListener extends BlockListener {
     					}
     				} else {
     					player.sendMessage(ChatColor.RED + "That isn't a HiddenCommandSign.");
+    				}
+    			} else {
+    				player.sendMessage(ChatColor.RED + "That isn't a sign.");
+    			}
+    		} else if (plugin.commandUsers.get(name) == signAction.QUICKCREATE) {
+    			if (isSign(event.getBlock())) {
+    				Sign theSign = (Sign)event.getBlock().getState();
+    				if (isCS(theSign)) {
+    					String signText = theSign.getLine(1) + theSign.getLine(2) + theSign.getLine(3);
+    					if (plugin.commandLinks.containsKey(signText)) {
+    						theSign.setLine(0, theSign.getLine(0) + ChatColor.BLUE);
+    						player.sendMessage(ChatColor.GOLD + "Sign converted using pre-set command(s).");
+    					} else {
+    						player.sendMessage(ChatColor.RED + "There are no commands set for the text on that sign.");
+    					}
+    				} else if (isHCS(theSign)) {
+    					player.sendMessage(ChatColor.RED + "That is already a hiddencommandsign.");
+    				} else {
+    					player.sendMessage(ChatColor.RED + "That isn't a commandsign.");
     				}
     			} else {
     				player.sendMessage(ChatColor.RED + "That isn't a sign.");

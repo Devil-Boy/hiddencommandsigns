@@ -43,7 +43,7 @@ public class HiddenCommandSigns extends JavaPlugin {
     String commandDBLocation = pluginMainDir + "/HiddenCommands.ini";
     
     // HCS Actions
-    public enum signAction { CREATE, DETECT, OBTAINREAL, ADDPERM };
+    public enum signAction { CREATE, DETECT, OBTAINREAL, ADDPERM, QUICKCREATE };
     HashMap<String, signAction> commandUsers = new HashMap<String, signAction>();
     HashMap<String, String[]> commandData = new HashMap<String, String[]>(); // For CREATE and ADDPERM
     
@@ -242,6 +242,16 @@ public class HiddenCommandSigns extends JavaPlugin {
 								// Tell him what to do
 								player.sendMessage(ChatColor.BLUE + "Left-click the sign you wish to add the permission(s) to.");
 							}
+						} else {
+							player.sendMessage(ChatColor.RED + "You do not have the permission required to run this command.");
+						}
+					} else if (args[0].toLowerCase().startsWith("q")) { // QuickCreate
+						if (hasPermissions(player, "hcs.create")) {
+							// Set him up for the hitting
+							addCommandPlayer(player , signAction.QUICKCREATE, null);
+							
+							// Tell him what to do
+							player.sendMessage(ChatColor.BLUE + "Left-click the sign you wish to convert into a hiddencommandsign.");
 						} else {
 							player.sendMessage(ChatColor.RED + "You do not have the permission required to run this command.");
 						}

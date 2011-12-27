@@ -125,7 +125,18 @@ public class HiddenCommandSignsBlockListener extends BlockListener {
     								commandSequence = commandSequence + " \"" + commandString + "\"";
     							}
     						}
-    						player.sendMessage(ChatColor.GOLD + commandSequence);
+    						player.sendMessage(ChatColor.GOLD + "Command(s): " +commandSequence);
+    						if (plugin.commandLinks.get(signText).permissions != null) {
+    							String permList = "";
+    							for (String permString : plugin.commandLinks.get(signText).permissions) {
+    								if (permList.equals("")) {
+    									permList = "\"" + permString + "\"";
+        							} else {
+        								permList = permList + " \"" + permString + "\"";
+        							}
+    							}
+    							player.sendMessage(ChatColor.GOLD + "Permission(s): " + permList);
+    						}
     					} catch (NullPointerException e) {
     						System.out.println("Could not find commandlink for HiddenCommandSign at " + event.getBlock().getLocation().toString() + " with the sign text " + signText);
     						player.sendMessage(ChatColor.RED + "That is a HiddenCommandSign, but the command link could not be found. Perhaps the database file was edited or is missing?");

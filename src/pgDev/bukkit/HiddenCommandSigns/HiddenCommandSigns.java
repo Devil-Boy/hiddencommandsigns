@@ -75,6 +75,9 @@ public class HiddenCommandSigns extends JavaPlugin {
     			}
     		}
     		
+    		// Legacy Permissions set up
+    		setupPermissions();
+    		
 	        // Register our events
 	        PluginManager pm = getServer().getPluginManager();
 	        pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);

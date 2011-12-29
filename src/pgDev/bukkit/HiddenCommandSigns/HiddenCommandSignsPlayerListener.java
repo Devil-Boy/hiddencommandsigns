@@ -3,15 +3,9 @@ package pgDev.bukkit.HiddenCommandSigns;
 import java.util.LinkedList;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.block.Sign;
-import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerListener;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.*;
 
 /**
  * Handle events for all Player related events
@@ -25,7 +19,8 @@ public class HiddenCommandSignsPlayerListener extends PlayerListener {
     }
     
     // Respond to right-click
-    public void onPlayerInteract(PlayerInteractEvent event) {
+    @SuppressWarnings("static-access")
+	public void onPlayerInteract(PlayerInteractEvent event) {
     	if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.hasPermissions(event.getPlayer(), "scs.use")) {
     		if (plugin.debug) {
         		System.out.println(event.getPlayer().getName() + " right-clicked a block.");

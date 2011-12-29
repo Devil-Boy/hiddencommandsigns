@@ -41,9 +41,8 @@ public class HCSDatabaseIO {
 					
 					// Add it to the DB
 					output.put(signText, hcToAdd);
-				} else if (virtLine == 5) {
+					
 					// Wipe the variables
-					signText = null;
 					hcToAdd = new HiddenCommand();
 				}
 			}

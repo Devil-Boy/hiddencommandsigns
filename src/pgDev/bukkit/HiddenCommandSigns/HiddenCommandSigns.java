@@ -239,11 +239,35 @@ public class HiddenCommandSigns extends JavaPlugin {
 								}
 								String[] permSequence = modifiedArgString.split("\" \"");
 								
-								// Set him up for the hitting
-								addCommandPlayer(player , signAction.ADDPERM, permSequence);
-								
-								// Tell him what to do
-								player.sendMessage(ChatColor.BLUE + "Left-click the sign you wish to add the permission(s) to.");
+								if (hasPermissions(player, "hcs.addperm.any")) {
+									// Set him up for the hitting
+									addCommandPlayer(player , signAction.ADDPERM, permSequence);
+									
+									// Tell him what to do
+									player.sendMessage(ChatColor.BLUE + "Left-click the sign you wish to add the permission(s) to.");
+								} else {
+									boolean hasThem = true;
+									String notHaves = "";
+									for (String lePerm : permSequence) {
+										if (!hasPermissions(player, lePerm)) {
+											hasThem = false;
+											if (notHaves.equals("")) {
+												notHaves = "\"" + lePerm + "\"";
+											} else {
+												notHaves = notHaves + " \"" + lePerm + "\"";
+											}
+										}
+									}
+									if (hasThem) {
+										// Set him up for the hitting
+										addCommandPlayer(player , signAction.ADDPERM, permSequence);
+										
+										// Tell him what to do
+										player.sendMessage(ChatColor.BLUE + "Left-click the sign you wish to add the permission(s) to.");
+									} else {
+										player.sendMessage(ChatColor.RED + "You do not have the permission to add permissions that you do not have: " + notHaves);
+									}
+								}
 							}
 						} else {
 							player.sendMessage(ChatColor.RED + "You do not have the permission required to run this command.");

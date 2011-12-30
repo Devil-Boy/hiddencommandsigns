@@ -38,6 +38,9 @@ public class HiddenCommandSignsPlayerListener extends PlayerListener {
 	            		System.out.println(event.getPlayer().getName() + " right-clicked a hiddencommandsign.");
 	            	}
 	    			
+	    			// Kill block placing
+	    			event.setCancelled(true);
+	    			
 	    			String signText = theSign.getLine(1) + theSign.getLine(2) + theSign.getLine(3);
 	    			try {
 		    			HiddenCommand trueCommand = plugin.commandLinks.get(signText);

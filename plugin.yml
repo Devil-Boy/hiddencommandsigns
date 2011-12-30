@@ -1,6 +1,6 @@
 name: HiddenCommandSigns
 main: pgDev.bukkit.HiddenCommandSigns.HiddenCommandSigns
-version: 0.7
+version: 0.8
 author: PG Dev Team
 authors: [Devil Boy]
 description: Hit a sign, run a hidden command!
@@ -31,3 +31,9 @@ permissions:
     hcs.obtainreal:
         default: op
         description: Can get the real command behind the sign.
+    hcs.addperm:
+        default: op
+        description: Can add permissions to signs.
+    hcs.addperm.any:
+        default: op
+        description: Can add any permissions to a sign, even those not owned.

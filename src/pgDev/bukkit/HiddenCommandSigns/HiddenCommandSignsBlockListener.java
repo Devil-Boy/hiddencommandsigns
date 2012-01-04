@@ -79,6 +79,7 @@ public class HiddenCommandSignsBlockListener extends BlockListener {
 	    				
 	    				if (isCS(theSign)) { // Convert the Sign to HCS
 	    					theSign.setLine(0, theSign.getLine(0) + ChatColor.BLUE);
+	    					theSign.update();
 	    				}
 	    				String signText = theSign.getLine(1) + theSign.getLine(2) + theSign.getLine(3);
 	    				plugin.commandLinks.put(signText, new HiddenCommand(name, plugin.commandData.get(name)));

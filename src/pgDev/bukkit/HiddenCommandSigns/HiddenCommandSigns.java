@@ -48,7 +48,7 @@ public class HiddenCommandSigns extends JavaPlugin {
     HashMap<String, String[]> commandData = new HashMap<String, String[]>(); // For CREATE and ADDPERM
     
     // True Command Database
-    HashMap<String, HiddenCommand> commandLinks = new HashMap<String, HiddenCommand>();
+    public HashMap<String, HiddenCommand> commandLinks = new HashMap<String, HiddenCommand>();
 
     public void onEnable() {
     	// Check for SCS

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.*;
 
@@ -12,7 +13,7 @@ import org.bukkit.event.player.*;
  * Handle events for all Player related events
  * @author pgDev
  */
-public class HiddenCommandSignsPlayerListener extends PlayerListener {
+public class HiddenCommandSignsPlayerListener implements Listener {
     private final HiddenCommandSigns plugin;
 
     public HiddenCommandSignsPlayerListener(HiddenCommandSigns instance) {

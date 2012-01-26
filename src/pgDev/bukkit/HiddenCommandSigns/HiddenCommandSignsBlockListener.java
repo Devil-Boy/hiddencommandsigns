@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 
 import pgDev.bukkit.HiddenCommandSigns.HiddenCommandSigns.signAction;
@@ -14,7 +15,7 @@ import pgDev.bukkit.HiddenCommandSigns.HiddenCommandSigns.signAction;
  * FakeCommandSigns block listener
  * @author pgDev
  */
-public class HiddenCommandSignsBlockListener extends BlockListener {
+public class HiddenCommandSignsBlockListener implements Listener {
     private final HiddenCommandSigns plugin;
 
     public HiddenCommandSignsBlockListener(final HiddenCommandSigns plugin) {

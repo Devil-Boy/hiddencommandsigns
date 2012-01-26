@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.*;
 
@@ -20,6 +21,7 @@ public class HiddenCommandSignsPlayerListener extends PlayerListener {
     
     // Respond to right-click
     @SuppressWarnings("static-access")
+    @EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
     	if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.hasPermissions(event.getPlayer(), "scs.use")) {
     		if (plugin.debug) {

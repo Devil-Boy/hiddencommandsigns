@@ -80,8 +80,8 @@ public class HiddenCommandSigns extends JavaPlugin {
     		
 	        // Register our events
 	        PluginManager pm = getServer().getPluginManager();
-	        pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
-	        pm.registerEvent(Event.Type.BLOCK_DAMAGE, blockListener, Priority.Normal, this);
+	        pm.registerEvents(playerListener, this);
+	        pm.registerEvents(blockListener, this);
 	        
 	        // Enable output
 	        PluginDescriptionFile pdfFile = this.getDescription();

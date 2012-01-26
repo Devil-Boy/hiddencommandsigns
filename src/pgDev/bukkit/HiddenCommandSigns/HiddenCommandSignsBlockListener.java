@@ -5,6 +5,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.*;
 
 import pgDev.bukkit.HiddenCommandSigns.HiddenCommandSigns.signAction;
@@ -45,6 +46,7 @@ public class HiddenCommandSignsBlockListener extends BlockListener {
     }
 
     // Respond to the command actions
+    @EventHandler
     public void onBlockDamage(BlockDamageEvent event) {
     	Player player = event.getPlayer();
     	String name = player.getName();

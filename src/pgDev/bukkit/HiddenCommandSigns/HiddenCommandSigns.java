@@ -6,14 +6,13 @@ import java.util.*;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.ChatColor;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
 
 import pgDev.bukkit.SimpleCommandSigns.SimpleCommandSigns;
+import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
@@ -35,7 +34,10 @@ public class HiddenCommandSigns extends JavaPlugin {
     String scsID;
     
     // Permissions support
+    public enum PermSystem {BukkitPerms, Legacy, PEX}
+    static PermSystem permSys = PermSystem.BukkitPerms;
     static PermissionHandler Permissions;
+    static PermissionsEx PEX;
     
     // File Locations
     String pluginMainDir = "./plugins/HiddenCommandSigns";
@@ -107,18 +109,26 @@ public class HiddenCommandSigns extends JavaPlugin {
     
     // Permissions Methods
     private void setupPermissions() {
-        Plugin permissions = this.getServer().getPluginManager().getPlugin("Permissions");
-
+        Plugin legacy = this.getServer().getPluginManager().getPlugin("Permissions");
+        Plugin pex = this.getServer().getPluginManager().getPlugin("PermissionsEx");
+        
         if (Permissions == null) {
-            if (permissions != null) {
-                Permissions = ((Permissions)permissions).getHandler();
-            } else {
+            if (legacy != null) {
+                Permissions = ((Permissions)legacy).getHandler();
+                permSys = PermSystem.Legacy;
             }
+        }
+        
+        if (PEX == null) {
+        	if (pex != null) {
+        		PEX = (PermissionsEx) pex;
+        		permSys = PermSystem.PEX;
+        	}
         }
     }
     
     public static boolean hasPermissions(Player player, String node) {
-        if (Permissions != null) { // .addUserPermission and .removeUserPermission: world, user, node
+        if (Permissions != null) {
         	return Permissions.has(player, node);
         } else {
             return player.hasPermission(node);

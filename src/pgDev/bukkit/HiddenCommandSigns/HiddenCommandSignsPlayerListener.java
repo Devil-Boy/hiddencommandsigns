@@ -9,6 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.*;
 
+import pgDev.bukkit.HiddenCommandSigns.HiddenCommandSigns.PermSystem;
+
 /**
  * Handle events for all Player related events
  * @author pgDev
@@ -51,11 +53,13 @@ public class HiddenCommandSignsPlayerListener implements Listener {
 		    			if (trueCommand.permissions != null) {
 			    			for (String permString : trueCommand.permissions) { // Do funky stuff
 			    				if (!plugin.hasPermissions(event.getPlayer(), permString)) {
-			    					if (plugin.Permissions == null) { // BukkitPerms
-			    						event.getPlayer().addAttachment(plugin, permString, true, 1);
-			    					} else { // Legacy Perms
+			    					if (plugin.permSys == PermSystem.Legacy) {
 			    						tempPerms.add(permString);
 			    						plugin.Permissions.addUserPermission(event.getClickedBlock().getWorld().getName(), event.getPlayer().getName(), permString);
+			    					} else if (plugin.permSys == PermSystem.PEX) {
+			    						plugin.PEX.getUser(event.getPlayer()).addTimedPermission(permString, event.getClickedBlock().getWorld().getName(), 1);
+			    					} else {
+			    						event.getPlayer().addAttachment(plugin, permString, true, 1);
 			    					}
 			    				}
 			    			}
@@ -66,7 +70,7 @@ public class HiddenCommandSignsPlayerListener implements Listener {
 			    			}
 			    			event.getPlayer().performCommand(commandString.replace("%p", event.getPlayer().getName()).replace("\\''", "\""));
 		    			}
-		    			if (plugin.Permissions != null) { // Wipe legacy perms
+		    			if (plugin.permSys == PermSystem.Legacy) { // Wipe legacy perms
 		    				for (String tempPerm : tempPerms) {
 		    					plugin.Permissions.removeUserPermission(event.getClickedBlock().getWorld().getName(), event.getPlayer().getName(), tempPerm);
 		    				}

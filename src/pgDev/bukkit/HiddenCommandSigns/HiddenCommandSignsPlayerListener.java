@@ -26,7 +26,7 @@ public class HiddenCommandSignsPlayerListener implements Listener {
     @SuppressWarnings("static-access")
     @EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
-    	if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.hasPermissions(event.getPlayer(), "scs.use")) {
+    	if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.hasPermissions(event.getPlayer(), "scsigns.use")) {
     		if (plugin.debug) {
         		System.out.println(event.getPlayer().getName() + " right-clicked a block.");
         	}
